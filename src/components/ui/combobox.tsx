@@ -1,0 +1,157 @@
+import * as React from "react";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+
+interface ComboboxProps {
+  value: string;
+  onChange: (value: string) => void;
+  options: string[];
+  placeholder?: string;
+  disabled?: boolean;
+  error?: string; // New error prop
+  configOption?: boolean;
+  search?: boolean;
+}
+
+export const Combobox: React.FC<ComboboxProps> = ({
+  value,
+  onChange,
+  options,
+  placeholder = "",
+  disabled = false,
+  error, // New error prop
+  configOption = true,
+  search = true,
+  ...props
+}) => {
+  const [open, setOpen] = React.useState(false);
+  const [selectedValues, setSelectedValues] = React.useState([value]);
+  const triggerRef = React.useRef(null);
+  const [popoverWidth, setPopoverWidth] = React.useState();
+
+  const handleSelect = (selectedValue: any) => {
+    if (typeof onChange === "function") {
+      const newValue = selectedValue === value ? "" : selectedValue;
+      onChange(newValue);
+      setSelectedValues([newValue]);
+    }
+    setOpen(false);
+  };
+
+  const handleClear = () => {
+    if (typeof onChange === "function") {
+      onChange("");
+      setSelectedValues([""]);
+    }
+    setOpen(false);
+  };
+
+  React.useEffect(() => {
+    if (triggerRef.current) {
+      setPopoverWidth(triggerRef.current.offsetWidth);
+    }
+  }, []);
+
+  return (
+    <div className="w-full">
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            role="combobox"
+            aria-expanded={open}
+            ref={triggerRef}
+            className={cn(
+              `w-full justify-between rounded-[0.5rem] border-neutral-500 bg-white px-3 py-2 text-left text-sm font-normal text-black outline-none transition-all duration-300 hover:bg-transparent hover:text-black ${props.className}`,
+              error ? "border-red-500" : "border-neutral-500 ",
+              disabled ? "bg-gray-200" : "bg-white"
+            )}
+            disabled={disabled}
+          >
+            {value ? (
+              options?.find((data) => data.value === value)?.label || "-"
+            ) : (
+              <span className={cn("text-sm")}>{placeholder}</span>
+            )}
+            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent
+          className="p-0 rounded-[0.5rem] border border-gray-400 bg-white"
+          style={{ width: popoverWidth }}
+        >
+          <Command className="rounded-[0.5rem]">
+            {search && <CommandInput placeholder="Search" />}
+            <CommandList>
+              <CommandEmpty>No Data found.</CommandEmpty>
+              <CommandGroup>
+                {options?.map((data) => (
+                  <CommandItem
+                    key={data.value}
+                    onSelect={() => handleSelect(data.value)}
+                    className={"rounded-[0.5rem]"}
+                  >
+                    <Check
+                      className={cn(
+                        "mr-2 h-4 w-4",
+                        value === data.value ? "opacity-100" : "opacity-0"
+                      )}
+                    />
+                    {data.label}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+              {configOption && (
+                <>
+                  <CommandSeparator />
+                  <CommandGroup>
+                    <div className="flex items-center justify-between">
+                      {selectedValues.length > 0 && (
+                        <>
+                          <CommandItem
+                            onSelect={handleClear}
+                            className="flex-1 justify-center cursor-pointer"
+                          >
+                            Clear
+                          </CommandItem>
+                          <CommandSeparator
+                            orientation="vertical"
+                            className="flex min-h-6 h-full"
+                          />
+                        </>
+                      )}
+                      <CommandItem
+                        onSelect={() => setOpen(false)}
+                        className="flex-1 justify-center cursor-pointer"
+                      >
+                        Close
+                      </CommandItem>
+                    </div>
+                  </CommandGroup>
+                </>
+              )}
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+      {error && (
+        <p className="mt-1 text-xs font-normal text-red-500">{error}</p>
+      )}
+    </div>
+  );
+};

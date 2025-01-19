@@ -1,3 +1,4 @@
+import { ColumnDef } from "@tanstack/react-table";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -5,17 +6,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ColumnDef } from "@tanstack/react-table";
-import moment from "moment";
 import { IoIosMore } from "react-icons/io";
-import { IoEyeOutline } from "react-icons/io5";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { CiTrash } from "react-icons/ci";
 
-export const userColumn = (
-  navigateWithData: (...args: any) => void,
-  handleEdit: (...args: any) => void,
-  handleDelete: (...args: any) => void
+export const projectColumn = (
+  handleEdit: any,
+  deleteProject: any
 ): ColumnDef<any>[] => [
   {
     accessorKey: "no",
@@ -27,26 +24,11 @@ export const userColumn = (
   },
   {
     accessorKey: "name",
-    header: "Name",
-    size: 100,
+    header: "Project Name",
   },
   {
-    accessorKey: "email",
-    header: "Email",
-    size: 100,
-  },
-  {
-    accessorKey: "created_at",
-    header: "Date",
-    size: 100,
-    cell: ({ row }) => {
-      const value = row.getValue("created_at");
-      return (
-        <div className="capitalize">
-          {moment(value as string).format("DD MMM YYYY")}
-        </div>
-      );
-    },
+    accessorKey: "location",
+    header: "Project Location",
   },
   {
     accessorKey: "action",
@@ -64,16 +46,12 @@ export const userColumn = (
               <IoIosMore />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem
-                onClick={() => navigateWithData("detail", data)}
-              >
-                <div className="flex gap-2 !items-center text-xs">
-                  <IoEyeOutline />
-                  <span>View Detail</span>
-                </div>
-              </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => handleEdit(data)}>
+              <DropdownMenuItem
+                onClick={() => {
+                  handleEdit(data);
+                }}
+              >
                 <div className="flex gap-2 items-center text-xs">
                   <MdOutlineModeEdit />
 
@@ -81,11 +59,14 @@ export const userColumn = (
                 </div>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => handleDelete(data.id)}>
+              <DropdownMenuItem
+                onClick={() => {
+                  deleteProject(data.id);
+                }}
+              >
                 {" "}
                 <div className="flex gap-2 items-center text-xs text-red-500">
                   <CiTrash />
-
                   <span>Delete</span>
                 </div>
               </DropdownMenuItem>

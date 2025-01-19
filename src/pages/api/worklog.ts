@@ -1,19 +1,19 @@
-import db from '@/lib/db';
+import db from "@/lib/db";
 
 export default async function handler(req: any, res: any) {
-  if (req.method === 'GET') {
+  if (req.method === "GET") {
     const { user_id, type } = req.query; // Tambahkan parameter `type`
 
     try {
       // Validasi apakah user_id tersedia
       if (!user_id) {
-        return res.status(400).json({ error: 'User ID is required' });
+        return res.status(400).json({ error: "User ID is required" });
       }
 
       // Konversi user_id ke angka
       const parsedUserId = parseInt(user_id, 10);
 
-      if (type === 'projects') {
+      if (type === "projects") {
         // Query untuk mendapatkan projects dari user_id
         const data = await db.projects.findMany({
           where: {
@@ -26,12 +26,10 @@ export default async function handler(req: any, res: any) {
         });
 
         if (!data || data.length === 0) {
-          return res.status(404).json({
-            error: `No projects found for user_id ${user_id}`,
-          });
+          return res.status(200).json([]);
         }
 
-        return res.status(200).json(data);
+        return res.status(200).json(data || []);
       }
 
       // Query data worklogs berdasarkan user_id
@@ -47,18 +45,16 @@ export default async function handler(req: any, res: any) {
 
       // Cek apakah data ditemukan
       if (!data || data.length === 0) {
-        return res
-          .status(404)
-          .json({ error: `No worklogs found for user_id ${user_id}` });
+        return res.status(200).json([]);
       }
 
-      res.status(200).json(data);
+      res.status(200).json(data || []);
     } catch (error) {
-      console.error('Error fetching data by user_id:', error);
-      res.status(500).json({ error: 'An error occurred while fetching data' });
+      console.error("Error fetching data by user_id:", error);
+      res.status(500).json({ error: "An error occurred while fetching data" });
     }
   } else {
-    res.setHeader('Allow', ['GET']);
+    res.setHeader("Allow", ["GET"]);
     res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }

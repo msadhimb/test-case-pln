@@ -1,7 +1,9 @@
-import { AppSidebar } from '@/components/AppSidebar';
-import Navbar from '@/components/Navbar';
-import { SidebarProvider } from '@/components/ui/sidebar';
-import React from 'react';
+import MyAlertDialog from "@/components/Alert";
+import { AppSidebar } from "@/components/AppSidebar";
+import Navbar from "@/components/Navbar";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import React from "react";
+import { ToastContainer } from "react-toastify";
 
 interface LayoutInterface {
   children: React.ReactNode;
@@ -18,6 +20,8 @@ const Layout: React.FC<LayoutInterface> = ({ children }) => {
         {/* <SidebarTrigger /> */}
         {children}
       </main>
+      <MyAlertDialog />
+      <ToastContainer position="top-center" />
     </SidebarProvider>
   );
 };

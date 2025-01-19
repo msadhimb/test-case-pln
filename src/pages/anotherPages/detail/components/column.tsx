@@ -1,60 +1,48 @@
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { ColumnDef } from '@tanstack/react-table';
-import moment from 'moment';
-import { IoIosMore } from 'react-icons/io';
-import { IoEyeOutline } from 'react-icons/io5';
-import { MdOutlineModeEdit } from 'react-icons/md';
-import { CiTrash } from 'react-icons/ci';
+import { ColumnDef } from "@tanstack/react-table";
+import moment from "moment";
 
 export const detailColumn = (): ColumnDef<any>[] => [
   {
-    accessorKey: 'no',
-    header: 'No',
+    accessorKey: "no",
+    header: "No",
     size: 12,
     cell: ({ row }) => {
       return <div className="capitalize">{row.index + 1}</div>;
     },
   },
   {
-    accessorKey: 'created_at',
-    header: 'Created At',
+    accessorKey: "created_at",
+    header: "Date",
     size: 100,
     cell: ({ row }) => {
-      const value = row.getValue('created_at');
+      const value = row.getValue("created_at");
       return (
         <div className="capitalize">
-          {moment(value as string).format('DD MMM YYYY')}
+          {moment(value as string).format("DD MMM YYYY")}
         </div>
       );
     },
   },
   {
-    accessorKey: 'projects.name',
-    header: 'Nama Project',
+    accessorKey: "projects.name",
+    header: "Nama Project",
     size: 100,
   },
   {
-    accessorKey: 'hours_worked',
-    header: 'Jam Kerja',
+    accessorKey: "hours_worked",
+    header: "Jam Kerja",
     size: 100,
   },
   {
-    accessorKey: 'daily_total',
-    header: 'Total Harian',
+    accessorKey: "daily_total",
+    header: "Total Harian",
     size: 100,
     cell: ({ row }) => {
-      const value = row.getValue('hours_worked');
+      const value = row.getValue("hours_worked");
       const dailyTotal = (value as number) / 8;
       return (
         <div className="capitalize">
-          {dailyTotal.toLocaleString('id-ID', {
+          {dailyTotal.toLocaleString("id-ID", {
             minimumFractionDigits: 1,
             maximumFractionDigits: 2,
           })}
@@ -63,16 +51,16 @@ export const detailColumn = (): ColumnDef<any>[] => [
     },
   },
   {
-    accessorKey: 'mnthly_Total',
-    header: 'Total Bulanan',
+    accessorKey: "mnthly_Total",
+    header: "Total Bulanan",
     size: 100,
     cell: ({ row }) => {
-      const value = row.getValue('hours_worked');
+      const value = row.getValue("hours_worked");
       const dailyTotal = (value as number) / 8;
       const monthlyTotal = dailyTotal / 31;
       return (
         <div className="capitalize">
-          {monthlyTotal.toLocaleString('id-ID', {
+          {monthlyTotal.toLocaleString("id-ID", {
             minimumFractionDigits: 1,
             maximumFractionDigits: 3,
           })}

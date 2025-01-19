@@ -1,36 +1,105 @@
-import db from '@/lib/db';
+import db from "@/lib/db";
 
 export default async function handler(req: any, res: any) {
-  if (req.method === 'GET') {
-    const { id } = req.query; // Ambil id dari query parameter
+  const { method } = req;
 
-    try {
-      // Validasi apakah id tersedia
-      if (!id) {
-        return res.status(400).json({ error: 'ID is required' });
+  switch (method) {
+    case "GET":
+      try {
+        // Query data berdasarkan id
+        const data = await db.projects.findMany();
+        res.status(200).json(data);
+      } catch (error) {
+        console.error("Error fetching data by ID:", error);
+        res
+          .status(500)
+          .json({ error: "An error occurred while fetching data" });
+      }
+      break;
+
+    case "POST":
+      const { name, location } = req.body;
+
+      if (!name || !location) {
+        return res.status(400).json({ error: "All fields are required" });
       }
 
-      // Query data berdasarkan id
-      const data = await db.projects.findUnique({
-        where: {
-          id: parseInt(id, 10), // Pastikan id diubah menjadi angka
-        },
-      });
+      try {
+        // Menambahkan project baru atau memperbarui project yang ada
+        const newProject = await db.projects.create({
+          data: {
+            name,
+            location,
+            created_at: new Date(),
+            updated_at: new Date(),
+          },
+        });
 
-      // Cek apakah data ditemukan
-      if (!data) {
-        return res
-          .status(404)
-          .json({ error: `Project with ID ${id} not found` });
+        res.status(201).json(newProject);
+      } catch (error) {
+        console.error("Error creating or updating project:", error);
+        res.status(500).json({
+          error: "An error occurred while creating or updating project",
+        });
       }
+      break;
 
-      res.status(200).json(data);
-    } catch (error) {
-      console.error('Error fetching data by ID:', error);
-      res.status(500).json({ error: 'An error occurred while fetching data' });
+    case "PUT": {
+      const { id } = req.query;
+      const { name, location } = req.body;
+
+      try {
+        if (!id) {
+          return res.status(400).json({ error: "User ID is required" });
+        }
+
+        // Hash password if provided
+        const updatedData: any = {
+          name,
+          location,
+        };
+
+        const updatedUser = await db.projects.update({
+          where: { id: parseInt(id) },
+          data: updatedData,
+        });
+
+        res.status(200).json(updatedUser);
+      } catch (error) {
+        console.error("Error updating user:", error);
+        res
+          .status(500)
+          .json({ error: "An error occurred while updating user" });
+      }
+      break;
     }
-  } else {
-    res.setHeader('Allow', ['GET']);
-    res.status(405).end(`Method ${req.method} Not Allowed`);
+
+    case "DELETE": {
+      const { id } = req.query;
+
+      try {
+        if (!id) {
+          return res.status(400).json({ error: "User ID is required" });
+        }
+
+        await db.projects.delete({
+          where: { id: parseInt(id) },
+        });
+
+        res
+          .status(200)
+          .json({ message: `User with ID ${id} deleted successfully` });
+      } catch (error) {
+        console.error("Error deleting user:", error);
+        res
+          .status(500)
+          .json({ error: "An error occurred while deleting user" });
+      }
+      break;
+    }
+
+    default:
+      res.setHeader("Allow", ["GET", "POST", "DELETE"]);
+      res.status(405).end(`Method ${method} Not Allowed`);
   }
 }
