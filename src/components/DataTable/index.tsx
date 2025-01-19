@@ -1,5 +1,4 @@
 'use client';
-'use client';
 
 import {
   ColumnDef,
@@ -19,23 +18,28 @@ import {
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { useMemo, useState } from 'react';
+import { useRouter } from 'next/router';
 
 interface DataTableProps<TData, TValue> {
   title?: string;
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  addProject?: boolean;
+  onAddProject?: () => void;
 }
 
 export function DataTable<TData, TValue>({
   title,
   columns,
   data,
+  addProject,
+  onAddProject,
 }: DataTableProps<TData, TValue>) {
-  const [search, setSearch] = useState(''); // State untuk pencarian
+  const [search, setSearch] = useState('');
+  const nav = useRouter();
 
-  // Filter data menggunakan useMemo
   const filteredData = useMemo(() => {
-    if (!search) return data; // Jika search kosong, gunakan data asli
+    if (!search) return data;
     return data.filter((item) => {
       return Object.values(item as object)
         .join(' ')
@@ -45,7 +49,7 @@ export function DataTable<TData, TValue>({
   }, [data, search]);
 
   const table = useReactTable({
-    data: filteredData, // Gunakan data yang difilter
+    data: filteredData,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
@@ -56,13 +60,22 @@ export function DataTable<TData, TValue>({
       <div className="flex gap-3 justify-end">
         <Input
           placeholder="Search..."
-          className="w-1/4"
+          className="w-[15rem]"
           value={search}
-          onChange={(e) => setSearch(e.target.value)} // Update state pencarian
+          onChange={(e: any) => setSearch(e.target.value)} // Update state pencarian
         />
-        <Button variant="success" className="rounded-md">
+        <Button variant="success" className="rounded-md" onClick={onAddProject}>
           Tambah
         </Button>
+        {addProject && (
+          <Button
+            variant="primary"
+            className="rounded-md"
+            onClick={() => nav.push('/project')}
+          >
+            Tambah Project
+          </Button>
+        )}
       </div>
       <div className="rounded-md shadow-md overflow-hidden w-full">
         <Table>

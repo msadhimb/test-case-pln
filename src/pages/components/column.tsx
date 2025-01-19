@@ -64,11 +64,7 @@ export const userColumn = (
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem
-                onClick={() =>
-                  navigateWithData('detail', {
-                    id: data.id,
-                  })
-                }
+                onClick={() => navigateWithData('detail', data)}
               >
                 <div className="flex gap-2 !items-center text-xs">
                   <IoEyeOutline />
