@@ -51,9 +51,6 @@ export default async function handler(req: any, res: any) {
                   },
                 },
               },
-              orderBy: {
-                work_date: "asc",
-              },
             });
           } else {
             // Query data worklogs berdasarkan user_id
