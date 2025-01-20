@@ -1,29 +1,29 @@
-import db from "@/lib/db";
-import bcrypt from "bcrypt";
+import db from '@/lib/db';
+import bcrypt from 'bcrypt';
 
 export default async function handler(req: any, res: any) {
   try {
     const { method } = req;
     switch (method) {
-      case "GET": {
+      case 'GET': {
         try {
           const data = await db.users.findMany();
           res.status(200).json(data);
         } catch (error) {
-          console.error("Error fetching data:", error);
+          console.error('Error fetching data:', error);
           res
             .status(500)
-            .json({ error: "An error occurred while fetching data" });
+            .json({ error: 'An error occurred while fetching data' });
         }
         break;
       }
 
-      case "POST": {
+      case 'POST': {
         const { name, email, password } = req.body;
 
         // Periksa apakah semua data ada
         if (!name || !email || !password) {
-          return res.status(400).json({ error: "All fields are required" });
+          return res.status(400).json({ error: 'All fields are required' });
         }
 
         try {
@@ -42,21 +42,21 @@ export default async function handler(req: any, res: any) {
 
           res.status(201).json(user);
         } catch (error) {
-          console.error("Error creating user:", error);
+          console.error('Error creating user:', error);
           res
             .status(500)
-            .json({ error: "An error occurred while creating user" });
+            .json({ error: 'An error occurred while creating user' });
         }
         break;
       }
 
-      case "PUT": {
+      case 'PUT': {
         const { id } = req.query;
         const { name, email, password } = req.body;
 
         try {
           if (!id) {
-            return res.status(400).json({ error: "User ID is required" });
+            return res.status(400).json({ error: 'User ID is required' });
           }
 
           // Hash password if provided
@@ -76,20 +76,20 @@ export default async function handler(req: any, res: any) {
 
           res.status(200).json(updatedUser);
         } catch (error) {
-          console.error("Error updating user:", error);
+          console.error('Error updating user:', error);
           res
             .status(500)
-            .json({ error: "An error occurred while updating user" });
+            .json({ error: 'An error occurred while updating user' });
         }
         break;
       }
 
-      case "DELETE": {
+      case 'DELETE': {
         const { id } = req.query;
 
         try {
           if (!id) {
-            return res.status(400).json({ error: "User ID is required" });
+            return res.status(400).json({ error: 'User ID is required' });
           }
 
           await db.users.delete({
@@ -100,21 +100,21 @@ export default async function handler(req: any, res: any) {
             .status(200)
             .json({ message: `User with ID ${id} deleted successfully` });
         } catch (error) {
-          console.error("Error deleting user:", error);
+          console.error('Error deleting user:', error);
           res
             .status(500)
-            .json({ error: "An error occurred while deleting user" });
+            .json({ error: 'An error occurred while deleting user' });
         }
         break;
       }
 
       default: {
-        res.setHeader("Allow", ["GET", "POST", "PUT", "DELETE"]);
+        res.setHeader('Allow', ['GET', 'POST', 'PUT', 'DELETE']);
         res.status(405).end(`Method ${method} Not Allowed`);
       }
     }
   } catch (error) {
-    console.error("Error:", error);
-    res.status(500).json({ error: "An error occurred" });
+    console.error('Error:', error);
+    res.status(500).json({ error: 'An error occurred' });
   }
 }

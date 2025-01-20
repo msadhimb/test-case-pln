@@ -1,7 +1,7 @@
-import * as React from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import * as React from 'react';
+import { Check, ChevronsUpDown } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 import {
   Command,
   CommandEmpty,
@@ -10,16 +10,16 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "@/components/ui/command";
+} from '@/components/ui/command';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from '@/components/ui/popover';
 
 interface ComboboxProps {
   value: string;
-  onChange: (value: string) => void;
+  onChange: (value: string, label?: string) => void;
   options: string[];
   placeholder?: string;
   disabled?: boolean;
@@ -32,7 +32,7 @@ export const Combobox: React.FC<ComboboxProps> = ({
   value,
   onChange,
   options,
-  placeholder = "",
+  placeholder = '',
   disabled = false,
   error, // New error prop
   configOption = true,
@@ -44,19 +44,19 @@ export const Combobox: React.FC<ComboboxProps> = ({
   const triggerRef = React.useRef(null);
   const [popoverWidth, setPopoverWidth] = React.useState();
 
-  const handleSelect = (selectedValue: any) => {
-    if (typeof onChange === "function") {
-      const newValue = selectedValue === value ? "" : selectedValue;
-      onChange(newValue);
+  const handleSelect = (selectedValue: any, label?: any) => {
+    if (typeof onChange === 'function') {
+      const newValue = selectedValue === value ? '' : selectedValue;
+      onChange(newValue, label);
       setSelectedValues([newValue]);
     }
     setOpen(false);
   };
 
   const handleClear = () => {
-    if (typeof onChange === "function") {
-      onChange("");
-      setSelectedValues([""]);
+    if (typeof onChange === 'function') {
+      onChange('');
+      setSelectedValues(['']);
     }
     setOpen(false);
   };
@@ -78,15 +78,15 @@ export const Combobox: React.FC<ComboboxProps> = ({
             ref={triggerRef}
             className={cn(
               `w-full justify-between rounded-[0.5rem] border-neutral-500 bg-white px-3 py-2 text-left text-sm font-normal text-black outline-none transition-all duration-300 hover:bg-transparent hover:text-black ${props.className}`,
-              error ? "border-red-500" : "border-neutral-500 ",
-              disabled ? "bg-gray-200" : "bg-white"
+              error ? 'border-red-500' : 'border-neutral-500 ',
+              disabled ? 'bg-gray-200' : 'bg-white'
             )}
             disabled={disabled}
           >
             {value ? (
-              options?.find((data) => data.value === value)?.label || "-"
+              options?.find((data) => data.value === value)?.label || '-'
             ) : (
-              <span className={cn("text-sm")}>{placeholder}</span>
+              <span className={cn('text-sm')}>{placeholder}</span>
             )}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
@@ -103,13 +103,13 @@ export const Combobox: React.FC<ComboboxProps> = ({
                 {options?.map((data) => (
                   <CommandItem
                     key={data.value}
-                    onSelect={() => handleSelect(data.value)}
-                    className={"rounded-[0.5rem]"}
+                    onSelect={() => handleSelect(data.value, data.label)}
+                    className={'rounded-[0.5rem]'}
                   >
                     <Check
                       className={cn(
-                        "mr-2 h-4 w-4",
-                        value === data.value ? "opacity-100" : "opacity-0"
+                        'mr-2 h-4 w-4',
+                        value === data.value ? 'opacity-100' : 'opacity-0'
                       )}
                     />
                     {data.label}

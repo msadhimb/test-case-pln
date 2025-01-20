@@ -1,37 +1,37 @@
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef } from '@tanstack/react-table';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { IoIosMore } from "react-icons/io";
-import { MdOutlineModeEdit } from "react-icons/md";
-import { CiTrash } from "react-icons/ci";
+} from '@/components/ui/dropdown-menu';
+import { IoIosMore } from 'react-icons/io';
+import { MdOutlineModeEdit } from 'react-icons/md';
+import { CiTrash } from 'react-icons/ci';
 
 export const projectColumn = (
   handleEdit: any,
   deleteProject: any
 ): ColumnDef<any>[] => [
   {
-    accessorKey: "no",
-    header: "No",
+    accessorKey: 'no',
+    header: 'No',
     size: 12,
     cell: ({ row }) => {
       return <div className="capitalize">{row.index + 1}</div>;
     },
   },
   {
-    accessorKey: "name",
-    header: "Project Name",
+    accessorKey: 'name',
+    header: 'Project Name',
   },
   {
-    accessorKey: "location",
-    header: "Project Location",
+    accessorKey: 'location',
+    header: 'Project Location',
   },
   {
-    accessorKey: "action",
+    accessorKey: 'action',
     header: ({ table }) => (
       <div className="flex justify-center">
         <span>Action</span>
@@ -46,7 +46,6 @@ export const projectColumn = (
               <IoIosMore />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() => {
                   handleEdit(data);
@@ -64,7 +63,7 @@ export const projectColumn = (
                   deleteProject(data.id);
                 }}
               >
-                {" "}
+                {' '}
                 <div className="flex gap-2 items-center text-xs text-red-500">
                   <CiTrash />
                   <span>Delete</span>

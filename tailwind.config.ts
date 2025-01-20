@@ -11,7 +11,8 @@ export default {
     extend: {
       colors: {
         success: '#3ebd6d',
-        secondary: '#bda43e',
+        secondary: '#EB8317',
+        secondaryLight: '#F3C623',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
@@ -22,10 +23,7 @@ export default {
           DEFAULT: 'hsl(var(--popover))',
           foreground: 'hsl(var(--popover-foreground))',
         },
-        primary: {
-          DEFAULT: 'hsl(var(--primary))',
-          foreground: 'hsl(var(--primary-foreground))',
-        },
+        primary: '#10375C',
         muted: {
           DEFAULT: 'hsl(var(--muted))',
           foreground: 'hsl(var(--muted-foreground))',

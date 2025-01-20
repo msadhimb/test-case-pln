@@ -1,10 +1,16 @@
 export const userDefaultValues = {
-  name: "",
-  email: "",
-  password: "",
+  name: '',
+  email: '',
+  password: '',
 };
 
 export const projectDefaultValues = {
-  name: "",
-  location: "",
+  name: '',
+  location: '',
+};
+
+export const detailDefaultValues = {
+  project_id: '',
+  work_date: new Date(),
+  hours_worked: 0,
 };

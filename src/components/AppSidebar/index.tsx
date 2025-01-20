@@ -9,18 +9,21 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarSeparator,
 } from '@/components/ui/sidebar';
+import Image from 'next/image';
+import { Separator } from '@radix-ui/react-separator';
 
 // Menu items.
 const items = [
   {
     title: 'Home',
-    url: '#',
+    url: '/home',
     icon: Home,
   },
   {
-    title: 'Inbox',
-    url: '#',
+    title: 'Project',
+    url: '/project',
     icon: Inbox,
   },
   {
@@ -43,8 +46,28 @@ const items = [
 export function AppSidebar() {
   return (
     <Sidebar>
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: `url(/assets/pattern/configPattern.svg)`,
+          backgroundRepeat: 'repeat',
+          backgroundSize: '8rem 8rem',
+          opacity: 0.05, // Sesuaikan opacity sesuai kebutuhan
+          zIndex: 0,
+        }}
+      />
       <SidebarContent>
         <SidebarGroup>
+          <div className="flex justify-center">
+            <Image
+              src="/assets/storySet/loginPict.svg"
+              alt="Logo"
+              width={0}
+              height={0}
+              className="mb-4 w-[5rem]"
+            />
+          </div>
+          <SidebarSeparator />
           <SidebarGroupLabel>Application</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>

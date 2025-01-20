@@ -1,4 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
+import Cookies from 'js-cookie';
 
 // Fungsi untuk membuat instance axios yang disesuaikan
 const createAxiosInstance = (baseUrl: string): AxiosInstance => {
@@ -13,11 +14,10 @@ const createAxiosInstance = (baseUrl: string): AxiosInstance => {
   axiosInstance.interceptors.request.use(
     (config) => {
       // Menambahkan Authorization Token jika ada
-      const token = localStorage.getItem('token'); // Ambil token dari localStorage (misalnya)
+      const token = Cookies.get('next-auth.session-token'); // Ambil token dari localStorage (misalnya)
       if (token) {
         config.headers['Authorization'] = `Bearer ${token}`;
       }
-      console.log('Request Sent:', config); // Log request
       return config;
     },
     (error) => {

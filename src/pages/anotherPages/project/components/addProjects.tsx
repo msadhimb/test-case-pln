@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -6,16 +6,16 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { useEffect } from "react";
-import { Controller, useForm } from "react-hook-form";
-import useHome from "@/pages/store";
-import useProjects from "../store";
-import _ from "lodash";
-import { projectDefaultValues } from "@/form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { projectValidationSchema } from "@/form/validation";
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { useEffect } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import useProjects from '../store';
+import _ from 'lodash';
+import { projectDefaultValues } from '@/form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { projectValidationSchema } from '@/form/validation';
+import useHome from '../../home/store';
 
 export function AddProjects({ isOpen, onClose, data }: any) {
   const { postProjects, putProjects } = useProjects();
@@ -29,7 +29,7 @@ export function AddProjects({ isOpen, onClose, data }: any) {
     setValue,
     watch,
   } = useForm({
-    mode: "onChange",
+    mode: 'onChange',
     defaultValues: projectDefaultValues,
     resolver: yupResolver(projectValidationSchema),
   });
@@ -54,8 +54,8 @@ export function AddProjects({ isOpen, onClose, data }: any) {
 
   useEffect(() => {
     if (!_.isEmpty(data)) {
-      setValue("name", data.name);
-      setValue("location", data.location);
+      setValue('name', data.name);
+      setValue('location', data.location);
     }
   }, [data]);
 
@@ -70,7 +70,7 @@ export function AddProjects({ isOpen, onClose, data }: any) {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>
-            {!_.isEmpty(data) ? "Edit" : "Add"} Projects
+            {!_.isEmpty(data) ? 'Edit' : 'Add'} Projects
           </DialogTitle>
           <DialogDescription className="py-5 flex gap-3 flex-col">
             <Controller

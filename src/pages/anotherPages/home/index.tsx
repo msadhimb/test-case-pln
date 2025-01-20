@@ -1,26 +1,31 @@
 import { DataTable } from '@/components/DataTable';
+import { userColumn } from './components/column';
+import useHome from './store';
+import { useEffect, useState } from 'react';
 import Layout from '@/layout';
-import React, { useEffect, useState } from 'react';
-import { projectColumn } from './components/column';
-import { AddProjects } from './components/addProjects';
-import useProjects from './store';
+import { useNavigate } from '@/hooks/useNavigate';
+import { AddUser } from './components/addUser';
 import { HashLoader } from 'react-spinners';
 import useAlertDialog from '@/components/Alert/store';
-import useHome from '../home/store';
 
-const Project = () => {
-  const { dataProjectOriginal, getProjectOriginal } = useHome();
-  const { deleteProjects } = useProjects();
+export default function Home() {
+  const { dataUser, getDataUser, deleteUserData } = useHome();
+  const { navigateWithData } = useNavigate();
   const { showAlert } = useAlertDialog();
 
-  const [loading, setLoading] = useState(false);
-  const [isOpenModal, setIsOpenModal] = useState(false);
   const [dataDetail, setDataDetail] = useState<any>([]);
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const getData = async () => {
     setLoading(true);
-    await getProjectOriginal();
+    await getDataUser();
     setLoading(false);
+  };
+
+  const handleEdit = (data: any) => {
+    setDataDetail(data);
+    setIsOpenModal(true);
   };
 
   const handleDelete = async (id: number) => {
@@ -30,8 +35,8 @@ const Project = () => {
       buttonConfirm: (
         <button
           onClick={async () => {
-            await deleteProjects(id);
-            await getProjectOriginal();
+            await deleteUserData(id);
+            await getDataUser();
             useAlertDialog.getState().closeDialog(); // Close the dialog
           }}
           className="px-4 py-2 bg-red-500 text-white rounded"
@@ -40,11 +45,6 @@ const Project = () => {
         </button>
       ),
     });
-  };
-
-  const handleEdit = (data: any) => {
-    setDataDetail(data);
-    setIsOpenModal(true);
   };
 
   useEffect(() => {
@@ -60,25 +60,24 @@ const Project = () => {
   }
 
   return (
-    <div>
+    <div className="h-full flex flex-col">
       <DataTable
-        columns={projectColumn(handleEdit, handleDelete)}
-        data={dataProjectOriginal || []}
-        onAddProject={() => {
-          setIsOpenModal(true);
+        columns={userColumn(navigateWithData, handleEdit, handleDelete)}
+        data={dataUser}
+        addProject
+        onAddProject={() => setIsOpenModal(true)}
+        title="Users Data"
+      />
+      <AddUser
+        isOpen={isOpenModal}
+        onClose={() => {
+          setIsOpenModal(false);
           setDataDetail([]);
         }}
-        title="Projects"
-      />
-      <AddProjects
-        isOpen={isOpenModal}
-        onClose={() => setIsOpenModal(false)}
         data={dataDetail}
       />
     </div>
   );
-};
+}
 
-export default Project;
-
-Project.getLayout = (page: React.ReactNode) => <Layout>{page}</Layout>;
+Home.getLayout = (page: React.ReactNode) => <Layout>{page}</Layout>;

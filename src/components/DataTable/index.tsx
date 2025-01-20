@@ -6,7 +6,6 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-
 import {
   Table,
   TableBody,
@@ -15,6 +14,16 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination';
+
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { useMemo, useState } from 'react';
@@ -36,6 +45,8 @@ export function DataTable<TData, TValue>({
   onAddProject,
 }: DataTableProps<TData, TValue>) {
   const [search, setSearch] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10); // Jumlah data per halaman
   const nav = useRouter();
 
   const filteredData = useMemo(() => {
@@ -48,8 +59,14 @@ export function DataTable<TData, TValue>({
     });
   }, [data, search]);
 
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const paginatedData = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return filteredData.slice(start, start + itemsPerPage);
+  }, [filteredData, currentPage, itemsPerPage]);
+
   const table = useReactTable({
-    data: filteredData,
+    data: paginatedData,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
@@ -62,9 +79,13 @@ export function DataTable<TData, TValue>({
           placeholder="Search..."
           className="w-[15rem]"
           value={search}
-          onChange={(e: any) => setSearch(e.target.value)} // Update state pencarian
+          onChange={(e: any) => setSearch(e.target.value)}
         />
-        <Button variant="success" className="rounded-md" onClick={onAddProject}>
+        <Button
+          variant="secondary"
+          className="rounded-md"
+          onClick={onAddProject}
+        >
           Tambah
         </Button>
         {addProject && (
@@ -79,21 +100,19 @@ export function DataTable<TData, TValue>({
       </div>
       <div className="rounded-md shadow-md overflow-hidden w-full">
         <Table>
-          <TableHeader className="bg-slate-100">
+          <TableHeader className="bg-primary text-white">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
@@ -131,6 +150,57 @@ export function DataTable<TData, TValue>({
             )}
           </TableBody>
         </Table>
+        {data.length > 10 && (
+          <>
+            <div className="px-4 pt-2 flex justify-center bg-primary text-white">
+              <span className="text-sm text-center">
+                Showing{' '}
+                {Math.min(
+                  (currentPage - 1) * itemsPerPage + 1,
+                  filteredData.length
+                )}{' '}
+                to {Math.min(currentPage * itemsPerPage, filteredData.length)}{' '}
+                of {filteredData.length} data
+              </span>
+            </div>
+            <Pagination className="bg-primary text-white">
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault(); // Mencegah scroll ke atas
+                      setCurrentPage((prev) => Math.max(prev - 1, 1));
+                    }}
+                  />
+                </PaginationItem>
+                {Array.from({ length: totalPages }).map((_, index) => (
+                  <PaginationItem key={index}>
+                    <PaginationLink
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault(); // Mencegah scroll ke atas
+                        setCurrentPage(index + 1);
+                      }}
+                      className={currentPage === index + 1 ? 'font-bold' : ''}
+                    >
+                      {index + 1}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
+                <PaginationItem>
+                  <PaginationNext
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault(); // Mencegah scroll ke atas
+                      setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+                    }}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </>
+        )}
       </div>
     </div>
   );

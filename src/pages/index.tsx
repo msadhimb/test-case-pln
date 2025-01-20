@@ -1,84 +1,106 @@
-import { DataTable } from "@/components/DataTable";
-import { userColumn } from "./components/column";
-import useHome from "./store";
-import { useEffect, useState } from "react";
-import Layout from "@/layout";
-import { useNavigate } from "@/hooks/useNavigate";
-import { AddUser } from "./components/addUser";
-import { HashLoader } from "react-spinners";
-import useAlertDialog from "@/components/Alert/store";
-import { toast } from "react-toastify";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@radix-ui/react-dropdown-menu';
+import { signIn } from 'next-auth/react';
+import Image from 'next/image';
+import { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { IoIosEye, IoIosEyeOff } from 'react-icons/io';
 
 export default function Home() {
-  const { dataUser, getDataUser, deleteUserData } = useHome();
-  const { navigateWithData } = useNavigate();
-  const { showAlert } = useAlertDialog();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [isVisible, setIsVisible] = useState(false);
 
-  const [dataDetail, setDataDetail] = useState<any>([]);
-  const [isOpenModal, setIsOpenModal] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isValid, dirtyFields },
+    reset,
+    setValue,
+    watch,
+  } = useForm({
+    mode: 'onChange',
+    defaultValues: {
+      username: '',
+      password: '',
+    },
+  });
 
-  const getData = async () => {
-    setLoading(true);
-    await getDataUser();
-    setLoading(false);
-  };
+  const onSubmit = async (data: any) => {
+    setError('');
 
-  const handleEdit = (data: any) => {
-    setDataDetail(data);
-    setIsOpenModal(true);
-  };
-
-  const handleDelete = async (id: number) => {
-    showAlert({
-      title: "Apakah anda yakin?",
-      subTitle: "Anda akan menghapus data ini",
-      buttonConfirm: (
-        <button
-          onClick={async () => {
-            await deleteUserData(id);
-            await getDataUser();
-            useAlertDialog.getState().closeDialog(); // Close the dialog
-          }}
-          className="px-4 py-2 bg-red-500 text-white rounded"
-        >
-          Delete
-        </button>
-      ),
+    const res = await signIn('credentials', {
+      redirect: false,
+      username: data.username,
+      password: data.password,
     });
+
+    if (res?.error) {
+      setError('Invalid username or password');
+    } else {
+      window.location.href = '/home'; // Redirect to home after successful login
+    }
   };
-
-  useEffect(() => {
-    getData();
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="h-full flex justify-center items-center ">
-        <HashLoader size={100} color="#3b82f6" />
-      </div>
-    );
-  }
 
   return (
-    <div className="h-full flex flex-col">
-      <DataTable
-        columns={userColumn(navigateWithData, handleEdit, handleDelete)}
-        data={dataUser}
-        addProject
-        onAddProject={() => setIsOpenModal(true)}
-        title="Users Data"
-      />
-      <AddUser
-        isOpen={isOpenModal}
-        onClose={() => {
-          setIsOpenModal(false);
-          setDataDetail([]);
-        }}
-        data={dataDetail}
-      />
+    <div className="flex items-center justify-center h-screen bg-gray-100">
+      <div className="bg-white p-6 rounded shadow-md grid grid-cols-3 gap-3 w-[75vw]">
+        <div className="col-span-2 flex justify-center">
+          <Image
+            src="/assets/storySet/loginPict.svg"
+            alt="Logo"
+            width={0}
+            height={0}
+            className="mb-4 w-[25rem]"
+          />
+        </div>
+        <div className="flex flex-col gap-4 justify-center border-l pl-4">
+          <h1 className="text-2xl font-bold mb-4">Worklog Management</h1>
+          <div className="flex flex-col gap-1">
+            <Label className="block font-semibold text-sm">Username</Label>
+            <Controller
+              name="username"
+              control={control}
+              render={({ field }) => <Input {...field} type="text" />}
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <Label className="block font-semibold text-sm">Password</Label>
+            <Controller
+              control={control}
+              name="password"
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  type={isVisible ? 'password' : 'text'}
+                  iconAfter={
+                    isVisible ? (
+                      <IoIosEyeOff
+                        size={20}
+                        onClick={() => setIsVisible(false)}
+                        className="cursor-pointer"
+                      />
+                    ) : (
+                      <IoIosEye
+                        size={20}
+                        onClick={() => setIsVisible(true)}
+                        className="cursor-pointer"
+                      />
+                    )
+                  }
+                />
+              )}
+            />
+          </div>
+          <div className="flex justify-end">
+            <Button variant="secondary" onClick={handleSubmit(onSubmit)}>
+              Masuk
+            </Button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
-
-Home.getLayout = (page: React.ReactNode) => <Layout>{page}</Layout>;

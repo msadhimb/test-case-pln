@@ -12,7 +12,7 @@ const CardData: React.FC<CardDataInterface> = ({
   description = 'Completed',
 }) => {
   return (
-    <div className="flex bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-lg shadow-lg p-4 items-center justify-between hover:scale-105 transition-transform duration-300 ease-in-out">
+    <div className="flex bg-gradient-to-r from-secondaryLight to-secondary text-white rounded-lg shadow-lg p-4 items-center justify-between hover:scale-105 transition-transform duration-300 ease-in-out">
       {/* Bagian Kiri */}
       <div>
         <h1 className="text-3xl font-extrabold">{title}</h1>

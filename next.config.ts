@@ -13,6 +13,10 @@ const nextConfig: NextConfig = {
         source: '/project',
         destination: '/anotherPages/project',
       },
+      {
+        source: '/home',
+        destination: '/anotherPages/home',
+      },
     ];
   },
 };
