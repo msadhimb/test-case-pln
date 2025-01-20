@@ -99,7 +99,7 @@ export const Combobox: React.FC<ComboboxProps> = ({
           style={{ width: popoverWidth }}
         >
           <Command className="rounded-[0.5rem]" {...(props as any)}>
-            {search && <CommandInput placeholder="Search" />}
+            {search && <CommandInput />}
             <CommandList>
               <CommandEmpty>No Data found.</CommandEmpty>
               <CommandGroup>
