@@ -132,10 +132,7 @@ export const Combobox: React.FC<ComboboxProps> = ({
                           >
                             Clear
                           </CommandItem>
-                          <CommandSeparator
-                            orientation="vertical"
-                            className="flex min-h-6 h-full"
-                          />
+                          <CommandSeparator className="flex min-h-6 h-full" />
                         </>
                       )}
                       <CommandItem
