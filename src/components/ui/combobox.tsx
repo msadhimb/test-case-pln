@@ -100,14 +100,15 @@ export const Combobox: React.FC<ComboboxProps> = ({
         >
           <Command className="rounded-[0.5rem]" {...(props as any)}>
             {search && <CommandInput />}
-            <CommandList>
-              <CommandEmpty>No Data found.</CommandEmpty>
-              <CommandGroup>
+            <CommandList {...(props as any)}>
+              <CommandEmpty {...(props as any)}>No Data found.</CommandEmpty>
+              <CommandGroup {...(props as any)}>
                 {options?.map((data: any) => (
                   <CommandItem
                     key={data.value}
                     onSelect={() => handleSelect(data.value, data.label)}
                     className={'rounded-[0.5rem]'}
+                    {...(props as any)}
                   >
                     <Check
                       className={cn(
@@ -121,23 +122,28 @@ export const Combobox: React.FC<ComboboxProps> = ({
               </CommandGroup>
               {configOption && (
                 <>
-                  <CommandSeparator />
-                  <CommandGroup>
+                  <CommandSeparator {...(props as any)} />
+                  <CommandGroup {...(props as any)}>
                     <div className="flex items-center justify-between">
                       {selectedValues.length > 0 && (
                         <>
                           <CommandItem
                             onSelect={handleClear}
                             className="flex-1 justify-center cursor-pointer"
+                            {...(props as any)}
                           >
                             Clear
                           </CommandItem>
-                          <CommandSeparator className="flex min-h-6 h-full" />
+                          <CommandSeparator
+                            className="flex min-h-6 h-full"
+                            {...(props as any)}
+                          />
                         </>
                       )}
                       <CommandItem
                         onSelect={() => setOpen(false)}
                         className="flex-1 justify-center cursor-pointer"
+                        {...(props as any)}
                       >
                         Close
                       </CommandItem>
