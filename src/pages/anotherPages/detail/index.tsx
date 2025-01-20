@@ -1,16 +1,18 @@
+"use client";
+
 import CardData from "@/components/CardData";
 import { DataTable } from "@/components/DataTable";
 import { ChartPie } from "@/components/PieCharts";
 import Layout from "@/layout";
 import React, { useEffect, useState } from "react";
-import detailColumn from "./components/column";
 import { useNavigate } from "@/hooks/useNavigate";
 import AddWorklog from "./components/addWorklog";
 import { HashLoader } from "react-spinners";
 import useAlertDialog from "@/components/Alert/store";
-import useDetail from "./store";
 import { Combobox } from "@/components/ui/combobox";
-import useHome from "../home/store";
+import { detailColumn } from "@/components/Column/column";
+import useDetail from "@/hooks/useDetail";
+import useHome from "@/hooks/useHome";
 
 const Detail = () => {
   const { readSecureData } = useNavigate();

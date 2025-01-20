@@ -1,16 +1,18 @@
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@radix-ui/react-dropdown-menu';
-import { signIn } from 'next-auth/react';
-import Image from 'next/image';
-import { useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { IoIosEye, IoIosEyeOff } from 'react-icons/io';
+"use client";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@radix-ui/react-dropdown-menu";
+import { signIn } from "next-auth/react";
+import Image from "next/image";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { IoIosEye, IoIosEyeOff } from "react-icons/io";
 
 export default function Home() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [isVisible, setIsVisible] = useState(false);
 
   const {
@@ -21,26 +23,26 @@ export default function Home() {
     setValue,
     watch,
   } = useForm({
-    mode: 'onChange',
+    mode: "onChange",
     defaultValues: {
-      username: '',
-      password: '',
+      username: "",
+      password: "",
     },
   });
 
   const onSubmit = async (data: any) => {
-    setError('');
+    setError("");
 
-    const res = await signIn('credentials', {
+    const res = await signIn("credentials", {
       redirect: false,
       username: data.username,
       password: data.password,
     });
 
     if (res?.error) {
-      setError('Invalid username or password');
+      setError("Invalid username or password");
     } else {
-      window.location.href = '/home'; // Redirect to home after successful login
+      window.location.href = "/home"; // Redirect to home after successful login
     }
   };
 
@@ -74,7 +76,7 @@ export default function Home() {
               render={({ field }) => (
                 <Input
                   {...field}
-                  type={isVisible ? 'password' : 'text'}
+                  type={isVisible ? "password" : "text"}
                   iconAfter={
                     isVisible ? (
                       <IoIosEyeOff

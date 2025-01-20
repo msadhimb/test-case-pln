@@ -10,12 +10,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-import useProjects from "../store";
 import _ from "lodash";
 import { projectDefaultValues } from "@/form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { projectValidationSchema } from "@/form/validation";
-import useHome from "../../home/store";
+import useHome from "@/hooks/useHome";
+import useProjects from "@/hooks/useProjects";
 
 const AddProjects = ({ isOpen, onClose, data }: any) => {
   const { postProjects, putProjects } = useProjects();

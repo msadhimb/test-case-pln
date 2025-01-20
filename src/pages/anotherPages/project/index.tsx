@@ -1,12 +1,14 @@
+"use client";
+
 import { DataTable } from "@/components/DataTable";
 import Layout from "@/layout";
 import React, { useEffect, useState } from "react";
-import projectColumn from "./components/column";
 import AddProjects from "./components/addProjects";
-import useProjects from "./store";
 import { HashLoader } from "react-spinners";
 import useAlertDialog from "@/components/Alert/store";
-import useHome from "../home/store";
+import { projectColumn } from "@/components/Column/column";
+import useHome from "@/hooks/useHome";
+import useProjects from "@/hooks/useProjects";
 
 const Project = () => {
   const { dataProjectOriginal, getProjectOriginal } = useHome();

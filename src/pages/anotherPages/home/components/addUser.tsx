@@ -11,7 +11,6 @@ import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
 import { IoIosEye, IoIosEyeOff } from "react-icons/io";
 import { Controller, useForm } from "react-hook-form";
-import useHome from "../store";
 import _ from "lodash";
 import { userDefaultValues } from "@/form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -19,6 +18,7 @@ import {
   addUserValidationSchema,
   updateUserValidationSchema,
 } from "@/form/validation";
+import useHome from "@/hooks/useHome";
 
 const AddUser = ({ isOpen, onClose, data }: any) => {
   const [isVisible, setIsVisible] = useState(true);

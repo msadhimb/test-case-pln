@@ -12,15 +12,13 @@ import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Combobox } from "@/components/ui/combobox";
 import { DatePicker } from "@/components/ui/datepicker";
-import useDetail from "../store";
 import { detailDefaultValues } from "@/form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { detailValidationSchema } from "@/form/validation";
 import moment from "moment";
-import useHome from "../../home/store";
+import useDetail from "@/hooks/useDetail";
 
 const AddWorklog = ({ isOpen, onClose, refreshData, idUser }: any) => {
-  const { getProjectOriginal } = useHome();
   const { getDataOptions, dataOptions, postWorklogData } = useDetail();
 
   const [loading, setloading] = useState(true);

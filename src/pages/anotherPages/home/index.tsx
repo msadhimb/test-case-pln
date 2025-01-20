@@ -1,12 +1,14 @@
+"use client";
+
 import { DataTable } from "@/components/DataTable";
-import userColumn from "./components/column";
-import useHome from "./store";
 import { useEffect, useState } from "react";
 import Layout from "@/layout";
 import { useNavigate } from "@/hooks/useNavigate";
 import AddUser from "./components/addUser";
 import { HashLoader } from "react-spinners";
 import useAlertDialog from "@/components/Alert/store";
+import { userColumn } from "@/components/Column/column";
+import useHome from "@/hooks/useHome";
 
 export default function Home() {
   const { dataUser, getDataUser, deleteUserData } = useHome();
