@@ -51,8 +51,17 @@ export function DataTable<TData, TValue>({
 
   const filteredData = useMemo(() => {
     if (!search) return data;
+
     return data.filter((item) => {
-      return Object.values(item as object)
+      // Gabungkan properti dari objek utama dan properti bersarang
+      const flattenedValues = [
+        ...Object.values(item as any), // Nilai dari item utama
+        ...Object.values((item as any).projects || {}), // Nilai dari objek projects
+        ...Object.values((item as any).users || {}), // Nilai dari objek users
+      ];
+
+      // Gabungkan semua nilai menjadi string, lalu cek apakah mengandung kata kunci
+      return flattenedValues
         .join(' ')
         .toLowerCase()
         .includes(search.toLowerCase());

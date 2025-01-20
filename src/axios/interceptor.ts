@@ -30,7 +30,6 @@ const createAxiosInstance = (baseUrl: string): AxiosInstance => {
   // Response Interceptor
   axiosInstance.interceptors.response.use(
     (response) => {
-      console.log('Response Received:', response); // Log response
       return response;
     },
     (error) => {
