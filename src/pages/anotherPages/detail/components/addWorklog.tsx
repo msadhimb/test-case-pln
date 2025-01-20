@@ -8,18 +8,20 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoIosEye, IoIosEyeOff } from "react-icons/io";
 import { Controller, useForm } from "react-hook-form";
 import useHome from "@/pages/store";
 import useProjects from "../../project/store";
 import { Combobox } from "@/components/ui/combobox";
 import { DatePicker } from "@/components/ui/datepicker";
+import useDetail from "../store";
 
 export function AddWorklog({ isOpen, onClose }: any) {
-  const [isVisible, setIsVisible] = useState(true);
+  const [loading, setloading] = useState(true);
   const { postProjects } = useProjects();
   const { getProjectOriginal } = useHome();
+  const { getDataOptions, dataOptions } = useDetail();
 
   const {
     control,
@@ -43,24 +45,34 @@ export function AddWorklog({ isOpen, onClose }: any) {
     reset();
   };
 
+  const getData = async () => {
+    setloading(true);
+    await getDataOptions();
+    setloading(false);
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  console.log(dataOptions);
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Add Worklog</DialogTitle>
           <DialogDescription className="py-5 flex gap-3 flex-col">
-            <div className="flex gap-3">
-              <Controller
-                control={control}
-                name="name"
-                render={({ field }) => <Combobox placeholder="User" />}
-              />
-              <Controller
-                control={control}
-                name="name"
-                render={({ field }) => <Combobox placeholder="Project" />}
-              />
-            </div>
+            <Controller
+              control={control}
+              name="name"
+              render={({ field }) => (
+                <Combobox
+                  placeholder="Project"
+                  options={dataOptions?.project}
+                />
+              )}
+            />
             <div className="flex gap-3">
               <Controller
                 control={control}
