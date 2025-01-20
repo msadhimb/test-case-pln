@@ -41,7 +41,7 @@ export const Combobox: React.FC<ComboboxProps> = ({
 }) => {
   const [open, setOpen] = React.useState(false);
   const [selectedValues, setSelectedValues] = React.useState([value]);
-  const triggerRef = React.useRef(null);
+  const triggerRef = React.useRef<any>(null);
   const [popoverWidth, setPopoverWidth] = React.useState();
 
   const handleSelect = (selectedValue: any, label?: any) => {
@@ -77,14 +77,17 @@ export const Combobox: React.FC<ComboboxProps> = ({
             aria-expanded={open}
             ref={triggerRef}
             className={cn(
-              `w-full justify-between rounded-[0.5rem] border-neutral-500 bg-white px-3 py-2 text-left text-sm font-normal text-black outline-none transition-all duration-300 hover:bg-transparent hover:text-black ${props.className}`,
+              `w-full justify-between rounded-[0.5rem] border-neutral-500 bg-white px-3 py-2 text-left text-sm font-normal text-black outline-none transition-all duration-300 hover:bg-transparent hover:text-black ${
+                (props as any).className
+              }`,
               error ? 'border-red-500' : 'border-neutral-500 ',
               disabled ? 'bg-gray-200' : 'bg-white'
             )}
             disabled={disabled}
           >
             {value ? (
-              options?.find((data) => data.value === value)?.label || '-'
+              (options?.find((data: any) => data.value === value) as any)
+                ?.label || '-'
             ) : (
               <span className={cn('text-sm')}>{placeholder}</span>
             )}
@@ -100,7 +103,7 @@ export const Combobox: React.FC<ComboboxProps> = ({
             <CommandList>
               <CommandEmpty>No Data found.</CommandEmpty>
               <CommandGroup>
-                {options?.map((data) => (
+                {options?.map((data: any) => (
                   <CommandItem
                     key={data.value}
                     onSelect={() => handleSelect(data.value, data.label)}
