@@ -1,17 +1,17 @@
-import db from '@/lib/db';
-import moment from 'moment';
+import db from "@/lib/db";
+import moment from "moment";
 
 export default async function handler(req: any, res: any) {
   try {
     const { method } = req;
 
     switch (method) {
-      case 'GET': {
+      case "GET": {
         const { user_id, month } = req.query;
 
         if (!user_id || !month) {
           return res.status(400).json({
-            error: 'User ID and month (01-12) are required',
+            error: "User ID and month (01-12) are required",
           });
         }
 
@@ -25,9 +25,9 @@ export default async function handler(req: any, res: any) {
 
         const year = moment().year();
         const startDate = moment(`${year}-${month}-01`)
-          .startOf('month')
+          .startOf("month")
           .toDate();
-        const endDate = moment(`${year}-${month}-01`).endOf('month').toDate();
+        const endDate = moment(`${year}-${month}-01`).endOf("month").toDate();
 
         try {
           const worklogs = await db.worklogs.findMany({
@@ -41,45 +41,50 @@ export default async function handler(req: any, res: any) {
           });
 
           const totalProjectsWorkedOn = new Set(
-            worklogs.map((log) => log.project_id)
+            worklogs.map((log: any) => log.project_id)
           ).size;
 
           const completedProjects = Array.from(
-            new Set(worklogs.map((log) => log.project_id))
+            new Set(worklogs.map((log: any) => log.project_id)) // Ambil unique project_id
           ).filter((projectId) => {
             const projectLogs = worklogs.filter(
-              (log) => log.project_id === projectId
+              (log: any) => log.project_id === projectId
             );
 
+            // Hitung total jam kerja untuk proyek tersebut
             const totalHours = projectLogs.reduce(
-              (sum, log) => sum + log.hours_worked,
+              (sum: any, log: any) => sum + log.hours_worked,
               0
             );
 
-            const dailyTotal = totalHours / 8;
-            const monthlyTotal = dailyTotal / moment(startDate).daysInMonth();
+            // Jumlah jam kerja yang dibutuhkan untuk proyek dianggap selesai
+            const totalHoursNeeded = moment(startDate).daysInMonth() * 8; // 8 jam per hari untuk bulan tersebut
 
-            return monthlyTotal >= 1;
+            // Hitung persentase pencapaian berdasarkan jam yang telah dikerjakan dibandingkan jam yang dibutuhkan
+            const monthlyTotal = (totalHours / totalHoursNeeded) * 100;
+
+            // Hanya proyek yang memiliki persentase 100% atau lebih yang dianggap selesai
+            return monthlyTotal >= 100;
           }).length;
 
           const totalDaysInMonth = moment(startDate).daysInMonth();
-          const workdays = worklogs.map((log) => log.work_date);
+          const workdays = worklogs.map((log: any) => log.work_date);
           const uniqueWorkdays = new Set(
-            workdays.map((date) => moment(date).format('YYYY-MM-DD'))
+            workdays.map((date: any) => moment(date).format("YYYY-MM-DD"))
           ).size;
           const totalAbsentDays = totalDaysInMonth - uniqueWorkdays;
 
           const totalMonthlyCompletion = Array.from(
-            new Set(worklogs.map((log) => log.project_id)) // Ambil unique project_id
-          ).reduce((total, projectId) => {
+            new Set(worklogs.map((log: any) => log.project_id)) // Ambil unique project_id
+          ).reduce((total: any, projectId: any) => {
             // Filter worklogs untuk setiap project_id
             const projectLogs = worklogs.filter(
-              (log) => log.project_id === projectId
+              (log: any) => log.project_id === projectId
             );
 
             // Hitung total jam kerja proyek
             const totalHours = projectLogs.reduce(
-              (sum, log) => sum + log.hours_worked,
+              (sum: any, log: any) => sum + log.hours_worked,
               0
             );
 
@@ -91,12 +96,12 @@ export default async function handler(req: any, res: any) {
               (totalWorkDays / moment(startDate).daysInMonth()) * 100;
 
             // Tambahkan kontribusi proyek ke total keseluruhan
-            return total + monthlyTotal;
+            return total + monthlyTotal / totalProjectsWorkedOn;
           }, 0);
 
           // Batasi totalMonthlyCompletion hingga maksimum 100%
           const normalizedMonthlyCompletion = Math.min(
-            totalMonthlyCompletion,
+            totalMonthlyCompletion as number,
             100
           );
 
@@ -117,20 +122,20 @@ export default async function handler(req: any, res: any) {
 
           return res.status(200).json(dashboardData);
         } catch (error) {
-          console.error('Error fetching dashboard data:', error);
+          console.error("Error fetching dashboard data:", error);
           return res
             .status(500)
-            .json({ error: 'An error occurred while fetching data' });
+            .json({ error: "An error occurred while fetching data" });
         }
       }
 
       default: {
-        res.setHeader('Allow', ['GET']);
+        res.setHeader("Allow", ["GET"]);
         return res.status(405).end(`Method ${req.method} Not Allowed`);
       }
     }
   } catch (error) {
-    console.error('Error:', error);
-    res.status(500).json({ error: 'An error occurred' });
+    console.error("Error:", error);
+    res.status(500).json({ error: "An error occurred" });
   }
 }

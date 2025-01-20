@@ -2,18 +2,19 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { loginValidationSchema } from "@/form/validation";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { Label } from "@radix-ui/react-dropdown-menu";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { IoIosEye, IoIosEyeOff } from "react-icons/io";
+import { toast } from "react-toastify";
 
 export default function Home() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
 
   const {
     control,
@@ -28,10 +29,13 @@ export default function Home() {
       username: "",
       password: "",
     },
+    resolver: yupResolver(loginValidationSchema),
   });
 
   const onSubmit = async (data: any) => {
     setError("");
+
+    const toastId = toast.loading("Processing request...");
 
     const res = await signIn("credentials", {
       redirect: false,
@@ -40,11 +44,39 @@ export default function Home() {
     });
 
     if (res?.error) {
+      toast.update(toastId, {
+        render: "Invalid username or password",
+        type: "error",
+        isLoading: false,
+        autoClose: 3000,
+      });
       setError("Invalid username or password");
     } else {
-      window.location.href = "/home"; // Redirect to home after successful login
+      toast.update(toastId, {
+        render: "Login successful",
+        type: "success",
+        isLoading: false,
+        autoClose: 3000,
+      });
+      setTimeout(() => {
+        window.location.href = "/home";
+      }, 3000);
     }
   };
+
+  const onEnter = (e: any) => {
+    if (e.key === "Enter") {
+      handleSubmit(onSubmit)();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("keydown", onEnter);
+
+    return () => {
+      document.removeEventListener("keydown", onEnter);
+    };
+  }, []);
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
@@ -97,7 +129,11 @@ export default function Home() {
             />
           </div>
           <div className="flex justify-end">
-            <Button variant="secondary" onClick={handleSubmit(onSubmit)}>
+            <Button
+              variant="secondary"
+              onClick={handleSubmit(onSubmit)}
+              disabled={!isValid}
+            >
               Masuk
             </Button>
           </div>

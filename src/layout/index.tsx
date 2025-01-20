@@ -1,11 +1,10 @@
-import MyAlertDialog from '@/components/Alert';
-import { AppSidebar } from '@/components/AppSidebar';
-import Navbar from '@/components/Navbar';
-import { SidebarProvider } from '@/components/ui/sidebar';
-import _ from 'lodash';
-import { useSession } from 'next-auth/react';
-import React, { useEffect } from 'react';
-import { ToastContainer } from 'react-toastify';
+import MyAlertDialog from "@/components/Alert";
+import { AppSidebar } from "@/components/AppSidebar";
+import Navbar from "@/components/Navbar";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import _ from "lodash";
+import { useSession } from "next-auth/react";
+import React, { useEffect } from "react";
 
 interface LayoutInterface {
   children: React.ReactNode;
@@ -15,10 +14,11 @@ const Layout: React.FC<LayoutInterface> = ({ children }) => {
   const { data: session, status } = useSession();
 
   useEffect(() => {
-    if (_.isEmpty(session) && status !== 'loading') {
-      window.location.href = '/'; // Redirect ke halaman login jika tidak ada sesi
+    if (_.isEmpty(session) && status !== "loading") {
+      window.location.href = "/"; // Redirect ke halaman login jika tidak ada sesi
     }
   }, [session, status]);
+
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -30,7 +30,6 @@ const Layout: React.FC<LayoutInterface> = ({ children }) => {
         {children}
       </main>
       <MyAlertDialog />
-      <ToastContainer position="top-center" />
     </SidebarProvider>
   );
 };

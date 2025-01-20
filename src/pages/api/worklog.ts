@@ -1,17 +1,17 @@
-import db from '@/lib/db';
-import moment from 'moment';
+import db from "@/lib/db";
+import moment from "moment";
 
 export default async function handler(req: any, res: any) {
   try {
     const { method } = req;
 
     switch (method) {
-      case 'GET': {
+      case "GET": {
         const { user_id, type, month } = req.query;
 
         // Validasi apakah user_id tersedia
         if (!user_id) {
-          return res.status(400).json({ error: 'User ID is required' });
+          return res.status(400).json({ error: "User ID is required" });
         }
 
         // Konversi user_id ke angka
@@ -28,14 +28,14 @@ export default async function handler(req: any, res: any) {
         let startDate, endDate;
         if (month) {
           const year = moment().year(); // Tahun saat ini
-          startDate = moment(`${year}-${month}-01`).startOf('month').toDate();
-          endDate = moment(`${year}-${month}-01`).endOf('month').toDate();
+          startDate = moment(`${year}-${month}-01`).startOf("month").toDate();
+          endDate = moment(`${year}-${month}-01`).endOf("month").toDate();
         }
 
         try {
           let data;
 
-          if (type === 'projects') {
+          if (type === "projects") {
             // Query untuk mendapatkan projects dari user_id
             data = await db.projects.findMany({
               where: {
@@ -50,6 +50,9 @@ export default async function handler(req: any, res: any) {
                     }),
                   },
                 },
+              },
+              orderBy: {
+                work_date: "asc",
               },
             });
           } else {
@@ -68,6 +71,9 @@ export default async function handler(req: any, res: any) {
                 projects: true,
                 users: true,
               },
+              orderBy: {
+                work_date: "asc",
+              },
             });
           }
 
@@ -78,26 +84,26 @@ export default async function handler(req: any, res: any) {
 
           return res.status(200).json(data || []);
         } catch (error) {
-          console.error('Error fetching data:', error);
+          console.error("Error fetching data:", error);
           return res
             .status(500)
-            .json({ error: 'An error occurred while fetching data' });
+            .json({ error: "An error occurred while fetching data" });
         }
       }
 
-      case 'POST': {
+      case "POST": {
         const { user_id, project_id, work_date, hours_worked } = req.body;
 
         // Validasi input
         if (
-          typeof user_id === 'undefined' ||
-          typeof project_id === 'undefined' ||
-          typeof work_date === 'undefined' ||
-          typeof hours_worked === 'undefined'
+          typeof user_id === "undefined" ||
+          typeof project_id === "undefined" ||
+          typeof work_date === "undefined" ||
+          typeof hours_worked === "undefined"
         ) {
           return res.status(400).json({
             error:
-              'user_id, project_id, work_date, and hours_worked are required',
+              "user_id, project_id, work_date, and hours_worked are required",
           });
         }
 
@@ -109,7 +115,7 @@ export default async function handler(req: any, res: any) {
         // Validasi hours_worked minimal 0
         if (isNaN(parsedHoursWorked) || parsedHoursWorked < 0) {
           return res.status(400).json({
-            error: 'hours_worked must be a number and at least 0',
+            error: "hours_worked must be a number and at least 0",
           });
         }
 
@@ -146,14 +152,14 @@ export default async function handler(req: any, res: any) {
           if (currentTotalForProject + parsedHoursWorked > 8) {
             return res.status(400).json({
               error:
-                'Total hours worked for this project cannot exceed 8 hours',
+                "Total hours worked for this project cannot exceed 8 hours",
             });
           }
 
           // Validasi apakah total jam kerja pada hari itu melebihi batas 16 jam
           if (currentTotalForDay + parsedHoursWorked > 16) {
             return res.status(400).json({
-              error: 'Total hours worked for this day cannot exceed 16 hours',
+              error: "Total hours worked for this day cannot exceed 16 hours",
             });
           }
 
@@ -170,19 +176,19 @@ export default async function handler(req: any, res: any) {
 
           return res.status(201).json(newWorklog);
         } catch (error) {
-          console.error('Error creating worklog:', error);
+          console.error("Error creating worklog:", error);
           return res
             .status(500)
-            .json({ error: 'An error occurred while creating worklog' });
+            .json({ error: "An error occurred while creating worklog" });
         }
       }
 
-      case 'DELETE': {
+      case "DELETE": {
         const { id } = req.query;
 
         // Validasi apakah id tersedia
         if (!id) {
-          return res.status(400).json({ error: 'ID is required' });
+          return res.status(400).json({ error: "ID is required" });
         }
 
         // Konversi id ke angka
@@ -198,20 +204,20 @@ export default async function handler(req: any, res: any) {
 
           return res.status(200).json(deletedWorklog);
         } catch (error) {
-          console.error('Error deleting worklog:', error);
+          console.error("Error deleting worklog:", error);
           return res
             .status(500)
-            .json({ error: 'An error occurred while deleting worklog' });
+            .json({ error: "An error occurred while deleting worklog" });
         }
       }
 
       default: {
-        res.setHeader('Allow', ['GET', 'POST']);
+        res.setHeader("Allow", ["GET", "POST"]);
         return res.status(405).end(`Method ${req.method} Not Allowed`);
       }
     }
   } catch (error) {
-    console.error('Error:', error);
-    res.status(500).json({ error: 'An error occurred' });
+    console.error("Error:", error);
+    res.status(500).json({ error: "An error occurred" });
   }
 }
