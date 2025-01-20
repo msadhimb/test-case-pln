@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 // Fungsi untuk membuat instance axios yang disesuaikan
 const createAxiosInstance = (baseUrl: string): AxiosInstance => {
   const axiosInstance = axios.create({
-    baseURL: baseUrl, // Menggunakan baseUrl yang diberikan
+    baseURL: baseUrl + "/api", // Menggunakan baseUrl yang diberikan
     headers: {
       "Content-Type": "application/json",
     },
@@ -48,7 +48,7 @@ const createAxiosInstance = (baseUrl: string): AxiosInstance => {
 
 // Membuat instance axios dengan baseUrl yang disesuaikan
 const instanceBaseUrl = createAxiosInstance(
-  `${process.env.NEXT_PUBLIC_API_URL}/api/`
+  process.env.NEXT_PUBLIC_BASE_URL as string
 );
 
 // Mengekspor instanceBaseUrl langsung
