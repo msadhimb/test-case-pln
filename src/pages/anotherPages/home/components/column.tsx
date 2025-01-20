@@ -12,7 +12,7 @@ import { IoEyeOutline } from "react-icons/io5";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { CiTrash } from "react-icons/ci";
 
-export const userColumn = (
+const userColumn = (
   navigateWithData: (...args: any) => void,
   handleEdit: (...args: any) => void,
   handleDelete: (...args: any) => void
@@ -97,3 +97,5 @@ export const userColumn = (
     size: 20,
   },
 ];
+
+export default userColumn;

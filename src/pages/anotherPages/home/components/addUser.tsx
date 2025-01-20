@@ -20,7 +20,7 @@ import {
   updateUserValidationSchema,
 } from "@/form/validation";
 
-export function AddUser({ isOpen, onClose, data }: any) {
+const AddUser = ({ isOpen, onClose, data }: any) => {
   const [isVisible, setIsVisible] = useState(true);
   const { postUserData, getDataUser, putUserData } = useHome();
 
@@ -128,4 +128,6 @@ export function AddUser({ isOpen, onClose, data }: any) {
       </DialogContent>
     </Dialog>
   );
-}
+};
+
+export default AddUser;

@@ -1,12 +1,12 @@
-import { DataTable } from '@/components/DataTable';
-import Layout from '@/layout';
-import React, { useEffect, useState } from 'react';
-import { projectColumn } from './components/column';
-import { AddProjects } from './components/addProjects';
-import useProjects from './store';
-import { HashLoader } from 'react-spinners';
-import useAlertDialog from '@/components/Alert/store';
-import useHome from '../home/store';
+import { DataTable } from "@/components/DataTable";
+import Layout from "@/layout";
+import React, { useEffect, useState } from "react";
+import projectColumn from "./components/column";
+import AddProjects from "./components/addProjects";
+import useProjects from "./store";
+import { HashLoader } from "react-spinners";
+import useAlertDialog from "@/components/Alert/store";
+import useHome from "../home/store";
 
 const Project = () => {
   const { dataProjectOriginal, getProjectOriginal } = useHome();
@@ -25,8 +25,8 @@ const Project = () => {
 
   const handleDelete = async (id: number) => {
     showAlert({
-      title: 'Apakah anda yakin?',
-      subTitle: 'Anda akan menghapus data ini',
+      title: "Apakah anda yakin?",
+      subTitle: "Anda akan menghapus data ini",
       buttonConfirm: (
         <button
           onClick={async () => {

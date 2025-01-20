@@ -1,12 +1,12 @@
-import { DataTable } from '@/components/DataTable';
-import { userColumn } from './components/column';
-import useHome from './store';
-import { useEffect, useState } from 'react';
-import Layout from '@/layout';
-import { useNavigate } from '@/hooks/useNavigate';
-import { AddUser } from './components/addUser';
-import { HashLoader } from 'react-spinners';
-import useAlertDialog from '@/components/Alert/store';
+import { DataTable } from "@/components/DataTable";
+import userColumn from "./components/column";
+import useHome from "./store";
+import { useEffect, useState } from "react";
+import Layout from "@/layout";
+import { useNavigate } from "@/hooks/useNavigate";
+import AddUser from "./components/addUser";
+import { HashLoader } from "react-spinners";
+import useAlertDialog from "@/components/Alert/store";
 
 export default function Home() {
   const { dataUser, getDataUser, deleteUserData } = useHome();
@@ -30,8 +30,8 @@ export default function Home() {
 
   const handleDelete = async (id: number) => {
     showAlert({
-      title: 'Apakah anda yakin?',
-      subTitle: 'Anda akan menghapus data ini',
+      title: "Apakah anda yakin?",
+      subTitle: "Anda akan menghapus data ini",
       buttonConfirm: (
         <button
           onClick={async () => {
