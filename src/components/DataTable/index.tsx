@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
 import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
-} from '@tanstack/react-table';
+} from "@tanstack/react-table";
 import {
   Table,
   TableBody,
@@ -13,7 +13,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 import {
   Pagination,
   PaginationContent,
@@ -22,12 +22,20 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from '@/components/ui/pagination';
+} from "@/components/ui/pagination";
 
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import { useMemo, useState } from 'react';
-import { useRouter } from 'next/router';
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { useMemo, useState } from "react";
+import { useRouter } from "next/router";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { IoIosMore } from "react-icons/io";
 
 interface DataTableProps<TData, TValue> {
   title?: string;
@@ -44,7 +52,7 @@ export function DataTable<TData, TValue>({
   addProject,
   onAddProject,
 }: DataTableProps<TData, TValue>) {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10); // Jumlah data per halaman
   const nav = useRouter();
@@ -62,7 +70,7 @@ export function DataTable<TData, TValue>({
 
       // Gabungkan semua nilai menjadi string, lalu cek apakah mengandung kata kunci
       return flattenedValues
-        .join(' ')
+        .join(" ")
         .toLowerCase()
         .includes(search.toLowerCase());
     });
@@ -92,7 +100,7 @@ export function DataTable<TData, TValue>({
         />
         <Button
           variant="secondary"
-          className="rounded-md"
+          className="rounded-md hidden md:block"
           onClick={onAddProject}
         >
           Tambah
@@ -100,12 +108,42 @@ export function DataTable<TData, TValue>({
         {addProject && (
           <Button
             variant="primary"
-            className="rounded-md"
-            onClick={() => nav.push('/project')}
+            className="rounded-md hidden md:block"
+            onClick={() => nav.push("/project")}
           >
             Tambah Project
           </Button>
         )}
+        <DropdownMenu>
+          <DropdownMenuTrigger className="focus:outline-none md:hidden">
+            <Button variant="default">
+              <IoIosMore />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>
+              <Button
+                variant="secondary"
+                className="rounded-md w-full"
+                onClick={onAddProject}
+              >
+                Tambah
+              </Button>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            {addProject && (
+              <DropdownMenuItem>
+                <Button
+                  variant="primary"
+                  className="rounded-md"
+                  onClick={() => nav.push("/project")}
+                >
+                  Tambah Project
+                </Button>
+              </DropdownMenuItem>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
       <div className="rounded-md shadow-md overflow-hidden w-full">
         <Table>
@@ -130,7 +168,7 @@ export function DataTable<TData, TValue>({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}
+                  data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
@@ -163,12 +201,12 @@ export function DataTable<TData, TValue>({
           <>
             <div className="px-4 pt-2 flex justify-center bg-primary text-white">
               <span className="text-sm text-center">
-                Showing{' '}
+                Showing{" "}
                 {Math.min(
                   (currentPage - 1) * itemsPerPage + 1,
                   filteredData.length
-                )}{' '}
-                to {Math.min(currentPage * itemsPerPage, filteredData.length)}{' '}
+                )}{" "}
+                to {Math.min(currentPage * itemsPerPage, filteredData.length)}{" "}
                 of {filteredData.length} data
               </span>
             </div>
@@ -191,7 +229,7 @@ export function DataTable<TData, TValue>({
                         e.preventDefault(); // Mencegah scroll ke atas
                         setCurrentPage(index + 1);
                       }}
-                      className={currentPage === index + 1 ? 'font-bold' : ''}
+                      className={currentPage === index + 1 ? "font-bold" : ""}
                     >
                       {index + 1}
                     </PaginationLink>

@@ -80,7 +80,7 @@ export default function Home() {
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
-      <div className="bg-white p-6 rounded shadow-md grid grid-cols-3 gap-3 w-[75vw]">
+      <div className="bg-white p-6 rounded shadow-xl grid grid-cols-1 md:grid-cols-3 gap-3 w-[85vw] md:w-[75vw]">
         <div className="col-span-2 flex justify-center">
           <Image
             src="/assets/storySet/loginPict.svg"
@@ -90,7 +90,7 @@ export default function Home() {
             className="mb-4 w-[25rem]"
           />
         </div>
-        <div className="flex flex-col gap-4 justify-center border-l pl-4">
+        <div className="flex flex-col gap-4 justify-center border-t md:border-l pt-4 md:pl-4">
           <h1 className="text-2xl font-bold mb-4">Worklog Management</h1>
           <div className="flex flex-col gap-1">
             <Label className="block font-semibold text-sm">Username</Label>

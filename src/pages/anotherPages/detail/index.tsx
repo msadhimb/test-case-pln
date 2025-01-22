@@ -145,7 +145,7 @@ const Detail = () => {
           />
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         <CardData
           title={(dataDashboard as any)?.totalProjectsWorkedOn || 0}
           subTitle="Projects"
@@ -162,7 +162,7 @@ const Detail = () => {
           description="Absen/Bulan"
         />
       </div>
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <ChartPie
           title="Project Completion (%)"
           subTitle={monthFilter.label}
