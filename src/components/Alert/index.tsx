@@ -1,6 +1,6 @@
 // components/AlertDialog.tsx
-import React from "react";
-import useAlertDialog from "./store";
+import React from 'react';
+import useAlertDialog from './store';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,7 +10,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+} from '@/components/ui/alert-dialog';
 
 const MyAlertDialog = () => {
   const { isOpen, title, subTitle, buttonConfirm, closeDialog } =
@@ -18,14 +18,16 @@ const MyAlertDialog = () => {
 
   return (
     <AlertDialog open={isOpen} onOpenChange={closeDialog}>
-      <AlertDialogContent>
+      <AlertDialogContent className="w-[80vw]">
         <AlertDialogHeader>
-          <AlertDialogTitle>{title}</AlertDialogTitle>
-          <AlertDialogDescription>{subTitle}</AlertDialogDescription>
+          <AlertDialogTitle className="text-left">{title}</AlertDialogTitle>
+          <AlertDialogDescription className="text-left">
+            {subTitle}
+          </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <div className="flex gap-3">
-            <AlertDialogCancel className="border-none">
+          <div className="flex gap-3 items-center justify-end">
+            <AlertDialogCancel className="border-none mt-0">
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction className="p-0 space-x-0">

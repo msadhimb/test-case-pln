@@ -1,22 +1,22 @@
-"use client";
+'use client';
 
-import CardData from "@/components/CardData";
-import { DataTable } from "@/components/DataTable";
-import { ChartPie } from "@/components/PieCharts";
-import Layout from "@/layout";
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "@/hooks/useNavigate";
-import AddWorklog from "./components/addWorklog";
-import { HashLoader } from "react-spinners";
-import useAlertDialog from "@/components/Alert/store";
-import { Combobox } from "@/components/ui/combobox";
-import { detailColumn } from "@/components/Column/column";
-import useDetail from "@/hooks/useDetail";
-import useHome from "@/hooks/useHome";
+import CardData from '@/components/CardData';
+import { DataTable } from '@/components/DataTable';
+import { ChartPie } from '@/components/PieCharts';
+import Layout from '@/layout';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from '@/hooks/useNavigate';
+import AddWorklog from './components/addWorklog';
+import { HashLoader } from 'react-spinners';
+import useAlertDialog from '@/components/Alert/store';
+import { Combobox } from '@/components/ui/combobox';
+import { detailColumn } from '@/components/Column/column';
+import useDetail from '@/hooks/useDetail';
+import useHome from '@/hooks/useHome';
 
 const Detail = () => {
   const { readSecureData } = useNavigate();
-  const data = readSecureData("detail");
+  const data = readSecureData('detail');
   const { dataWorklog, getWorklog } = useHome();
   const { showAlert } = useAlertDialog();
   const { deleteWorklogData, getDashboarData, dataDashboard } = useDetail();
@@ -28,7 +28,7 @@ const Detail = () => {
       new Date().getMonth() + 1 < 10
         ? `0${new Date().getMonth() + 1}`
         : new Date().getMonth() + 1,
-    label: new Date().toLocaleString("default", { month: "long" }),
+    label: new Date().toLocaleString('default', { month: 'long' }),
   });
 
   const getData = async () => {
@@ -48,8 +48,8 @@ const Detail = () => {
 
   const handleDelete = async (id: number) => {
     showAlert({
-      title: "Apakah anda yakin?",
-      subTitle: "Anda akan menghapus data ini",
+      title: 'Apakah anda yakin?',
+      subTitle: 'Anda akan menghapus data ini',
       buttonConfirm: (
         <button
           onClick={async () => {
@@ -57,7 +57,7 @@ const Detail = () => {
             await getData();
             useAlertDialog.getState().closeDialog(); // Close the dialog
           }}
-          className="px-4 py-2 bg-red-500 text-white rounded"
+          className="px-4 py-2 bg-red-500 text-white rounded border-none"
         >
           Delete
         </button>
@@ -82,7 +82,7 @@ const Detail = () => {
       <div className="flex justify-end">
         <div className="w-[15rem]">
           <Combobox
-            value={monthFilter.value + ""}
+            value={monthFilter.value + ''}
             placeholder="Pilih Bulan"
             onChange={(value, label) => {
               setMonthFilter({
@@ -93,52 +93,52 @@ const Detail = () => {
             options={
               [
                 {
-                  value: "01",
-                  label: "Januari",
+                  value: '01',
+                  label: 'Januari',
                 },
                 {
-                  value: "02",
-                  label: "Februari",
+                  value: '02',
+                  label: 'Februari',
                 },
                 {
-                  value: "03",
-                  label: "Maret",
+                  value: '03',
+                  label: 'Maret',
                 },
                 {
-                  value: "04",
-                  label: "April",
+                  value: '04',
+                  label: 'April',
                 },
                 {
-                  value: "05",
-                  label: "Mei",
+                  value: '05',
+                  label: 'Mei',
                 },
                 {
-                  value: "06",
-                  label: "Juni",
+                  value: '06',
+                  label: 'Juni',
                 },
                 {
-                  value: "07",
-                  label: "Juli",
+                  value: '07',
+                  label: 'Juli',
                 },
                 {
-                  value: "08",
-                  label: "Agustus",
+                  value: '08',
+                  label: 'Agustus',
                 },
                 {
-                  value: "09",
-                  label: "September",
+                  value: '09',
+                  label: 'September',
                 },
                 {
-                  value: "10",
-                  label: "Oktober",
+                  value: '10',
+                  label: 'Oktober',
                 },
                 {
-                  value: "11",
-                  label: "November",
+                  value: '11',
+                  label: 'November',
                 },
                 {
-                  value: "12",
-                  label: "Desember",
+                  value: '12',
+                  label: 'Desember',
                 },
               ] as any
             }
@@ -168,14 +168,14 @@ const Detail = () => {
           subTitle={monthFilter.label}
           data={[
             {
-              label: "Complete",
+              label: 'Complete',
               value: (dataDashboard as any)?.completionRate || 0,
-              fill: "#10375C",
+              fill: '#10375C',
             },
             {
-              label: "Incomplete",
+              label: 'Incomplete',
               value: 100 - (dataDashboard as any)?.completionRate || 0,
-              fill: "#F3C623",
+              fill: '#F3C623',
             },
           ]}
           desc={`${
@@ -187,14 +187,14 @@ const Detail = () => {
           subTitle={monthFilter.label}
           data={[
             {
-              label: "Hadir",
+              label: 'Hadir',
               value: (dataDashboard as any)?.attendanceRate || 0,
-              fill: "#10375C",
+              fill: '#10375C',
             },
             {
-              label: "Tidak Hadir",
+              label: 'Tidak Hadir',
               value: 100 - (dataDashboard as any)?.attendanceRate || 0,
-              fill: "#F3C623",
+              fill: '#F3C623',
             },
           ]}
           desc={`${

@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { DataTable } from "@/components/DataTable";
-import Layout from "@/layout";
-import React, { useEffect, useState } from "react";
-import AddProjects from "./components/addProjects";
-import { HashLoader } from "react-spinners";
-import useAlertDialog from "@/components/Alert/store";
-import { projectColumn } from "@/components/Column/column";
-import useHome from "@/hooks/useHome";
-import useProjects from "@/hooks/useProjects";
+import { DataTable } from '@/components/DataTable';
+import Layout from '@/layout';
+import React, { useEffect, useState } from 'react';
+import AddProjects from './components/addProjects';
+import { HashLoader } from 'react-spinners';
+import useAlertDialog from '@/components/Alert/store';
+import { projectColumn } from '@/components/Column/column';
+import useHome from '@/hooks/useHome';
+import useProjects from '@/hooks/useProjects';
 
 const Project = () => {
   const { dataProjectOriginal, getProjectOriginal } = useHome();
@@ -27,8 +27,8 @@ const Project = () => {
 
   const handleDelete = async (id: number) => {
     showAlert({
-      title: "Apakah anda yakin?",
-      subTitle: "Anda akan menghapus data ini",
+      title: 'Apakah anda yakin?',
+      subTitle: 'Anda akan menghapus data ini',
       buttonConfirm: (
         <button
           onClick={async () => {
@@ -36,7 +36,7 @@ const Project = () => {
             await getProjectOriginal();
             useAlertDialog.getState().closeDialog(); // Close the dialog
           }}
-          className="px-4 py-2 bg-red-500 text-white rounded"
+          className="px-4 py-2 bg-red-500 text-white rounded border-none"
         >
           Delete
         </button>

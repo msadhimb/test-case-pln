@@ -1,12 +1,14 @@
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { signOut } from "next-auth/react";
-import { SidebarTrigger } from "../ui/sidebar";
+'use client';
+
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { signOut } from 'next-auth/react';
+import { SidebarTrigger } from '../ui/sidebar';
 
 export default function Navbar() {
   const handleLogout = () => {
     signOut({
-      callbackUrl: "/", // Redirect ke halaman setelah logout
+      callbackUrl: '/', // Redirect ke halaman setelah logout
     });
   };
   return (
@@ -15,14 +17,14 @@ export default function Navbar() {
         className="absolute inset-0"
         style={{
           backgroundImage: `url(/assets/pattern/configPattern.svg)`,
-          backgroundRepeat: "repeat",
-          backgroundSize: "8rem 8rem",
+          backgroundRepeat: 'repeat',
+          backgroundSize: '8rem 8rem',
           opacity: 0.05, // Sesuaikan opacity sesuai kebutuhan
           zIndex: 0,
         }}
       />
-      <div className="p-4 flex h-20 w-full shrink-0 items-center bg-white rounded-md relative z-50">
-        <div className="md:hidden">
+      <div className="p-4 flex h-20 w-full shrink-0 items-center bg-white rounded-md ">
+        <div className="md:hidden relative z-50">
           <SidebarTrigger />
         </div>
         <Link href="#" className="mr-6 hidden lg:flex" prefetch={false}>
